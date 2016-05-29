@@ -18,6 +18,7 @@ docker build -t "xen-orchestra:latest" --rm --no-cache .
 ## Running the Container
 
 There are two options for starting the container.
+
 1) Run container without using database volumes
 ```sh
 docker run -d -p 8000:8000 --name xen-orchestra brijohn/xen-orchestra
