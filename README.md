@@ -4,10 +4,12 @@
 ## Image Installation
 
 From Docker Hub:
+
 ```sh
 docker pull brijohn/xen-orchestra
 ```
 From Source:
+
 ```sh
 git clone https://github.com/brijohn/docker-xen-orchestra.git
 cd docker-xen-orchestra
@@ -17,20 +19,50 @@ docker build -t "xen-orchestra:latest" --rm --no-cache .
 
 ## Running the Container
 
-There are two options for starting the container.
+Create a set of volumes used to store the XO databases.
 
-1) Run container without using database volumes
-```sh
-docker run -d -p 8000:8000 --name xen-orchestra brijohn/xen-orchestra
-```
-2) Mount XO data store on host filesystem
 ```sh
 docker volume create --name xo-redis
 docker volume create --name xo-server
-docker run -d -p 8000:8000  -v xo-redis:/var/lib/redis -v xo-server:/var/lib/xo-server \
+```
+
+Next launch the container using the previously created volumes.
+
+```sh
+docker run -d -p 8000:8000  -v xo-redis:/var/lib/redis \
+-v xo-server:/var/lib/xo-server \
 --name xen-orchestra brijohn/xen-orchestra
 ```
 
+## Log Files
+
+Use docker's logging functionality to print out the xo-server log file.
+
+```sh
+docker logs xen-orchestra
+```
+
+## Adding SSL support
+
+If SSL support is needed, you will need to rebuild the container after modifying the xo-server.yaml
+file by adding lines specifying the certificate and key file.
+
+#### Example SSL yaml file
+```yaml
+user: 'app'
+http:
+  listen:
+    -
+      host: '0.0.0.0'
+      port: 8000
+      cert: <path/to/cert/file>
+      key:  <path/to/key/file>
+  mounts:
+    '/': '/app/xo-web/dist/'
+redis:
+    uri: 'tcp://localhost:6379'
+```
+For a full list of SSL/TLS options see: [NodeJS:tls.createServer](https://nodejs.org/docs/latest/api/tls.html#tls_tls_createserver_options_secureconnectionlistener)
 
 
 ## Author
