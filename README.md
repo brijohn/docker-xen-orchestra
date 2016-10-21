@@ -1,5 +1,5 @@
 # Xen Orchestra Docker Container
-> stable 4.x branch of [Xen Orchestra](http://xen-orchestra.com/)
+> stable 5.x branch of [Xen Orchestra](http://xen-orchestra.com/)
 
 ## Image Installation
 
