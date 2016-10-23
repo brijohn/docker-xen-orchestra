@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM debian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -14,14 +14,15 @@ RUN apt-get -qq update && \
     build-essential redis-server libpng-dev git python-minimal curl supervisor
 
 RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n && \
-        chmod +x /usr/local/bin/n && n stable
+        chmod +x /usr/local/bin/n && n 4.4.7
 
 # Clone code
-RUN git clone --depth=1 -b stable http://github.com/vatesfr/xo-server && \
-    git clone --depth=1 -b stable http://github.com/vatesfr/xo-web && \
+RUN git clone --depth=1 -b v4.17.0 http://github.com/vatesfr/xo-server && \
+    git clone --depth=1 -b v4.16.0 http://github.com/vatesfr/xo-web && \
     rm -rf xo-server/.git xo-web/.git xo-server/sample.config.yaml
 
 # Build dependancies then cleanup
+RUN npm i -g npm@3.5.3
 RUN cd xo-server/ && npm install && npm run build && cd ..
 RUN cd xo-web/ && npm install && npm run build
 RUN apt-get -qq purge build-essential make gcc git libpng-dev curl && \
