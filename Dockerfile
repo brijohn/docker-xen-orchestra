@@ -10,24 +10,30 @@ RUN useradd -d /app -r app && \
 
 WORKDIR /app
 
-#RUN echo "deb http://http.debian.net/debian wheezy-backports main" >> /etc/apt/sources.list
 # Install requirements
 RUN apt-get -qq update && \
     apt-get -qq install --no-install-recommends ca-certificates apt-transport-https \
     build-essential redis-server libpng-dev git python-minimal curl supervisor
 
+# Install nodejs
 RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n && \
-        chmod +x /usr/local/bin/n && n 4.4.7
+        chmod +x /usr/local/bin/n && n 6.11.0
+
+# Install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get -qq update && apt-get install yarn
 
 # Clone code
-RUN git clone --depth=1 -b v5.3.0 http://github.com/vatesfr/xo-server && \
-    git clone --depth=1 -b v5.3.0 http://github.com/vatesfr/xo-web && \
+RUN git clone --depth=1 -b stable http://github.com/vatesfr/xo-server && \
+    git clone --depth=1 -b stable http://github.com/vatesfr/xo-web && \
     rm -rf xo-server/.git xo-web/.git xo-server/sample.config.yaml
 
-# Build dependancies then cleanup
-RUN npm i -g npm@3.5.3
-RUN cd xo-server/ && npm install && npm run build && cd ..
-RUN cd xo-web/ && npm install && npm run build
+# Build dependencies then cleanup
+RUN cd xo-server/ && yarn && yarn run build && cd ..
+RUN cd xo-web/ && yarn && yarn run build
+
+# Clean up
 RUN apt-get -qq purge build-essential make gcc git libpng-dev curl && \
     apt-get autoremove -qq && apt-get clean && \
     rm -rf /usr/share/doc /usr/share/man /var/log/* /tmp/* && \
