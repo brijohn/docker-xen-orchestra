@@ -25,13 +25,11 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     apt-get -qq update && apt-get install yarn
 
 # Clone code
-RUN git clone --depth=1 -b stable http://github.com/vatesfr/xo-server && \
-    git clone --depth=1 -b stable http://github.com/vatesfr/xo-web && \
-    rm -rf xo-server/.git xo-web/.git xo-server/sample.config.yaml
+RUN git clone --depth=1 -b stable https://github.com/vatesfr/xen-orchestra && \
+    rm -rf xen-orchestra/.git xen-orchestra/packages/xo-server/sample.config.yaml
 
 # Build dependencies then cleanup
-RUN cd xo-server/ && yarn && yarn run build && cd ..
-RUN cd xo-web/ && yarn && yarn run build
+RUN cd xen-orchestra/ && yarn && yarn run build && cd ..
 
 # Clean up
 RUN apt-get -qq purge build-essential make gcc git libpng-dev curl && \
@@ -40,7 +38,7 @@ RUN apt-get -qq purge build-essential make gcc git libpng-dev curl && \
     mkdir -p /var/log/redis
 
 # Copy over entrypoint and daemon config files
-COPY xo-server.yaml /app/xo-server/.xo-server.yaml
+COPY xo-server.yaml /app/xen-orchestra/packages/xo-server/.xo-server.yaml
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY redis.conf /etc/redis/redis.conf
 COPY xo-entry.sh /
