@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG branch=stable
 
 RUN useradd -d /app -r app && \
+    useradd -r redis && \
     mkdir -p /var/lib/xo-server && \
     mkdir -p /var/lib/xoa-backups && \
     chown -R app /var/lib/xo-server && \
@@ -37,8 +38,7 @@ RUN cd xen-orchestra/ && yarn && yarn run build && cd ..
 # Clean up
 RUN apt-get -qq purge build-essential make gcc git libpng-dev curl && \
     apt-get autoremove -qq && apt-get clean && \
-    rm -rf /usr/share/doc /usr/share/man /var/log/* /tmp/* && \
-    mkdir -p /var/log/redis
+    rm -rf /usr/share/doc /usr/share/man /var/log/* /tmp/*
 
 # Copy over entrypoint and daemon config files
 COPY xo-server.yaml /app/xen-orchestra/packages/xo-server/.xo-server.yaml
