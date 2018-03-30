@@ -19,7 +19,7 @@ RUN apt-get -qq update && \
 
 # Install nodejs
 RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n && \
-        chmod +x /usr/local/bin/n && n 6.11.0
+    chmod +x /usr/local/bin/n && n lts
 
 # Install yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
