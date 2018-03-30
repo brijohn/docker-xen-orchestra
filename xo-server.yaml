@@ -7,4 +7,4 @@ http:
   mounts:
     '/': '/app/xen-orchestra/packages/xo-web/dist/'
 redis:
-    uri: 'tcp://localhost:6379'
+    uri: 'redis://localhost:6379'
