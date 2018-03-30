@@ -48,7 +48,7 @@ COPY xo-entry.sh /
 
 EXPOSE 8000
 
-VOLUME ["/var/lib/redis/", "/var/lib/xo-server", "/var/lib/xoa-backups"]
+VOLUME ["/var/lib/redis", "/var/lib/xo-server", "/var/lib/xoa-backups"]
 
 ENTRYPOINT ["/xo-entry.sh"]
 CMD ["/usr/bin/supervisord"]
