@@ -51,4 +51,4 @@ EXPOSE 8000
 VOLUME ["/var/lib/redis", "/var/lib/xo-server", "/var/lib/xoa-backups"]
 
 ENTRYPOINT ["/xo-entry.sh"]
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
