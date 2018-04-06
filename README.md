@@ -24,6 +24,7 @@ Create a set of volumes used to store the XO databases.
 ```sh
 docker volume create --name xo-redis
 docker volume create --name xo-server
+docker volume create --name xo-backup
 ```
 
 Next launch the container using the previously created volumes.
@@ -31,6 +32,7 @@ Next launch the container using the previously created volumes.
 ```sh
 docker run -d -p 8000:8000  -v xo-redis:/var/lib/redis \
 -v xo-server:/var/lib/xo-server \
+-v xo-backup:/var/lib/xoa-backup \
 --name xen-orchestra brijohn/xen-orchestra
 ```
 
