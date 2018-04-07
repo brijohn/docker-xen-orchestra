@@ -13,9 +13,14 @@ From Source:
 ```sh
 git clone https://github.com/brijohn/docker-xen-orchestra.git
 cd docker-xen-orchestra
-docker build -t "xen-orchestra:latest" --rm --no-cache .
+docker build -t "xen-orchestra:stable" --rm --no-cache .
 ```
 
+By default this will be the stable branch. If you wish to build a branch other then stable you can add --build-arg branch=<commitish> to the docker build command. For example to build master run:
+
+```sh
+docker build -t "xen-orchestra:latest" --build-arg branch=master --rm --no-cache .
+```
 
 ## Running the Container
 

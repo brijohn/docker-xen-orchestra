@@ -2,6 +2,8 @@ FROM debian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
 
+ARG branch=stable
+
 RUN useradd -d /app -r app && \
     mkdir -p /var/lib/xo-server && \
     mkdir -p /var/lib/xoa-backups && \
@@ -25,8 +27,9 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     apt-get -qq update && apt-get install yarn
 
 # Clone code
-RUN git clone --depth=1 -b stable https://github.com/vatesfr/xen-orchestra && \
-    rm -rf xen-orchestra/.git xen-orchestra/packages/xo-server/sample.config.yaml
+RUN git clone https://github.com/vatesfr/xen-orchestra && \
+    cd xen-orchestra && git checkout "$branch" && \
+    rm -rf .git packages/xo-server/sample.config.yaml
 
 # Build dependencies then cleanup
 RUN cd xen-orchestra/ && yarn && yarn run build && cd ..
