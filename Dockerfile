@@ -1,27 +1,11 @@
-FROM debian:jessie AS buildenv
-
-ENV DEBIAN_FRONTEND noninteractive
+FROM node:carbon-alpine AS buildenv
 
 ARG branch=master
-
-RUN useradd -d /app -r app
 
 WORKDIR /app
 
 # Install requirements
-RUN apt-get -qq update && \
-    apt-get -qq install --no-install-recommends ca-certificates apt-transport-https \
-    build-essential libpng-dev git python curl
-
-# Install nodejs
-RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
-RUN chmod +x /usr/local/bin/n
-RUN n lts
-
-# Install yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
-RUN apt-get -qq update && apt-get install yarn
+RUN apk add --no-cache -U build-base git make curl python libpng-dev
 
 # Clone code
 RUN git clone https://github.com/vatesfr/xen-orchestra
@@ -41,10 +25,10 @@ WORKDIR /app/xen-orchestra/packages/xo-server/node_modules
 RUN ln -s ../../../packages/xo-server-* .
 
 
-FROM debian:jessie
+FROM node:carbon-alpine
 
-RUN useradd -d /app -r app
-RUN useradd -r redis
+RUN adduser -h /app -D -H -S app
+RUN adduser -D -H -S redis
 
 RUN mkdir -p /var/lib/xo-server
 RUN mkdir -p /var/lib/xoa-backups
@@ -53,13 +37,7 @@ RUN chown -R app /var/lib/xoa-backups
 
 WORKDIR /app
 
-RUN apt-get -qq update && \
-    apt-get -qq install --no-install-recommends ca-certificates redis-server supervisor curl
-
-# Install nodejs
-RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
-RUN chmod +x /usr/local/bin/n
-RUN n lts
+RUN apk add --no-cache -U bash supervisor redis
 
 # Copy built code
 COPY --from=buildenv /app/xen-orchestra /app/xen-orchestra
