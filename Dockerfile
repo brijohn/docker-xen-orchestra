@@ -2,7 +2,7 @@ FROM debian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG branch=stable
+ARG branch=master
 
 RUN useradd -d /app -r app && \
     useradd -r redis && \

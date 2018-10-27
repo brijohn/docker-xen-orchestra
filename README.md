@@ -1,5 +1,5 @@
 # Xen Orchestra Docker Container
-> stable 5.x branch of [Xen Orchestra](http://xen-orchestra.com/)
+> master 5.x branch of [Xen Orchestra](http://xen-orchestra.com/)
 
 ## Image Installation
 
@@ -13,13 +13,13 @@ From Source:
 ```sh
 git clone https://github.com/brijohn/docker-xen-orchestra.git
 cd docker-xen-orchestra
-docker build -t "xen-orchestra:stable" --rm --no-cache .
+docker build -t "xen-orchestra:latest" --rm --no-cache .
 ```
 
-By default this will be the stable branch. If you wish to build a branch other then stable you can add --build-arg branch=<commitish> to the docker build command. For example to build master run:
+By default this will be the master branch. If you wish to build a branch other then master you can add --build-arg branch=<commitish> to the docker build command. For example to build stable run:
 
 ```sh
-docker build -t "xen-orchestra:latest" --build-arg branch=master --rm --no-cache .
+docker build -t "xen-orchestra:stable" --build-arg branch=stable --rm --no-cache .
 ```
 
 ## Running the Container
