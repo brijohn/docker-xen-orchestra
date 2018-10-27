@@ -32,8 +32,13 @@ RUN git clone https://github.com/vatesfr/xen-orchestra && \
     cd xen-orchestra && git checkout "$branch" && \
     rm -rf .git packages/xo-server/sample.config.yaml
 
-# Build dependencies then cleanup
+# Build dependencies
 RUN cd xen-orchestra/ && yarn && yarn run build && cd ..
+
+# Enable all plugins
+RUN cd xen-orchestra/packages/xo-server/node_modules && \
+    ln -s ../../../packages/xo-server-* . && \
+    cd ..
 
 # Clean up
 RUN apt-get -qq purge build-essential make gcc git libpng-dev curl && \
