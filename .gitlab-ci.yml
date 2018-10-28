@@ -1,0 +1,31 @@
+image: docker:latest
+
+stages:
+  - build
+  - release
+
+variables:
+  CONTAINER_IMAGE_BASE: $CI_REGISTRY/$CI_PROJECT_PATH
+  CONTAINER_RELEASE_NAME: latest
+  CONTAINER_TEST_NAME: $CI_BUILD_REF_SLUG
+
+build:
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build --no-cache --pull --build-arg branch=${XO_BRANCH:-master} -t $CONTAINER_IMAGE_BASE:$CONTAINER_TEST_NAME .
+    - docker push $CONTAINER_IMAGE_BASE:$CONTAINER_TEST_NAME
+  tags:
+    - docker
+
+release:
+  stage: release
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker pull $CONTAINER_IMAGE_BASE:$CONTAINER_TEST_NAME
+    - docker tag $CONTAINER_IMAGE_BASE:$CONTAINER_TEST_NAME $CONTAINER_IMAGE_BASE:$CONTAINER_RELEASE_NAME
+    - docker push $CONTAINER_IMAGE_BASE:$CONTAINER_RELEASE_NAME
+  only:
+    - master
+  tags:
+    - docker
