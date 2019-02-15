@@ -11,7 +11,7 @@ WORKDIR /app
 # Install requirements
 RUN apt-get -qq update && \
     apt-get -qq install --no-install-recommends ca-certificates apt-transport-https \
-    build-essential libpng-dev git python-minimal
+    build-essential libpng-dev git python
 
 # Clone code
 RUN git clone https://github.com/vatesfr/xen-orchestra
