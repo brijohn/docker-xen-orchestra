@@ -1,0 +1,25 @@
+#!/bin/bash
+
+declare -A versions=(
+	[master]="master"
+	[5.31.2]="27262ff3e8f27a1347b575307369b3b9a8040e51"
+	[5.30.0]="c55daae734e19f6ebdef0bdc58c3cadcb37b63fc"
+	[5.29.0]="db3c5cfcb8748fa02d1042c0535f80f31952594f"
+)
+
+exists() {
+  if [ "$2" != in ]; then
+    echo "Incorrect usage."
+    echo "Correct usage: exists {key} in {array}"
+    return
+  fi
+  eval '[ ${'$3'[$1]+isset} ]'
+}
+
+IFS=', ' read -r -a tags <<< "$DOCKER_TAG"
+if ! exists ${tags[0]} in versions; then
+	echo "${tags[0]} is not a valid version"
+	exit 1
+fi
+echo "docker build --build-arg branch=${versions[${tags[0]}]} -t $DOCKER_REPO:${DOCKER_TAG//,/ -t $DOCKER_REPO:} ."
+docker build --build-arg branch=${versions[${tags[0]}]} -t $DOCKER_REPO:${DOCKER_TAG//,/ -t $DOCKER_REPO:} .
