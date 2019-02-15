@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM node:carbon-stretch-slim
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -16,16 +16,7 @@ WORKDIR /app
 # Install requirements
 RUN apt-get -qq update && \
     apt-get -qq install --no-install-recommends ca-certificates apt-transport-https \
-    build-essential redis-server libpng-dev git python-minimal curl supervisor
-
-# Install nodejs
-RUN curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n && \
-    chmod +x /usr/local/bin/n && n lts
-
-# Install yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get -qq update && apt-get install yarn
+    build-essential redis-server libpng-dev git python-minimal supervisor
 
 # Clone code
 RUN git clone https://github.com/vatesfr/xen-orchestra && \
