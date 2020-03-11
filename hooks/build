@@ -2,6 +2,7 @@
 
 declare -A versions=(
 	[master]="master"
+	[5.44.1]="2bacb0f073b725f5ade37d3c427943f7a4514df3"
 	[5.31.2]="27262ff3e8f27a1347b575307369b3b9a8040e51"
 	[5.30.0]="c55daae734e19f6ebdef0bdc58c3cadcb37b63fc"
 	[5.29.0]="db3c5cfcb8748fa02d1042c0535f80f31952594f"
